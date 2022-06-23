@@ -2,15 +2,11 @@ package main
 
 import (
 	"fmt"
+	"html"
 	"net/http"
-	"strings"
-
-	//"strconv"
-	//"html"
-	//"time"
-
 	"soundapidata"
-	//"github.com/RotimiFreq/SoundApiData"
+	"strconv"
+	"strings"
 )
 
 func main() {
@@ -64,7 +60,8 @@ func main() {
 	Mixerslice = append(Mixerslice, test2)
 	Mixerslice = append(Mixerslice, test3)
 
-	fmt.Print(Mixerslice)
+	// fmt.Print(len(Mixerslice))
+	// fmt.Print(Mixerslice[]//)
 
 	//http package has methods for dealing with requests
 
@@ -74,25 +71,31 @@ func main() {
 
 		urlPathElements := strings.Split(r.URL.Path, "/")
 
-		fmt.Println(urlPathElements)
-
 		// If request is GET with correct syntax
-		// if urlPathElements[1] == "roman_number" {
-		// number, _ := strconv.Atoi(strings.TrimSpace(urlPathElements[2]))
-		// if number == 0 || number > 10 {
-		// // If resource is not in the list, send Not Found status
 
-		// w.WriteHeader(http.StatusNotFound)
-		// w.Write([]byte("404 - Not Found"))
-		// } else {
-		// fmt.Fprintf(w, "%q", html.EscapeString(romanNumerals.Numerals[number]))
-		// }
+		if urlPathElements[1] == "mixer" {
 
-		// } else {
-		// // For all other requests, tell that Client sent a bad request
-		// w.WriteHeader(http.StatusBadRequest)
-		// w.Write([]byte("400 - Bad request"))
-		// }
+			// // converting a string integer to integer using Atoi function
+			number, _ := strconv.Atoi(strings.TrimSpace(urlPathElements[2]))
+
+			x := len(Mixerslice)
+
+			if number == 0 || number > x {
+
+				// If resource is not in the list, send Not Found status
+
+				w.WriteHeader(http.StatusNotFound)
+				w.Write([]byte("404 - Not Found"))
+			} else {
+				dataRet := Mixerslice[number]
+				fmt.Fprintf(w, "%q", html.EscapeString(dataRet)
+			}
+
+		} else {
+			// For all other requests, tell that Client sent a bad request
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte("400 - Bad request"))
+		}
 	})
 	// Create a server and run it on 8000 port
 	s := &http.Server{
