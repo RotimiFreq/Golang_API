@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"html"
 	"net/http"
-	"soundapidata"
+
+	//"soundapidata"
 	"strconv"
 	"strings"
 )
@@ -12,49 +13,63 @@ import (
 func main() {
 
 	fmt.Println("confiming")
-	var test = soundapidata.Mixer{}
+	type model struct {
+		Name           string
+		ModelNo        int
+		YearProduce    int
+		Price          int
+		StillProducing bool
+		ChannelNo      string
+		OutputNo       string
+		UsbConn        bool
+		WifiConn       bool
+		DanteSupport   bool
+		About          string
+	}
+
+	var test model
 
 	test.Name = "quantum"
 	test.ModelNo = 19945
 	test.YearProduce = 2019
 	test.Price = 8000
 	test.StillProducing = true
-	test.ChannelNo = 48
-	test.OutputNo = 32
+	test.ChannelNo = "48"
+	test.OutputNo = "32"
 	test.UsbConn = true
 	test.WifiConn = true
 	test.DanteSupport = true
 	test.About = "a wonderful system"
 
-	var test2 = soundapidata.Mixer{}
+	var test2 model
 
 	test2.Name = "qu-32"
 	test2.ModelNo = 19945
 	test2.YearProduce = 2014
 	test2.Price = 2300
 	test2.StillProducing = true
-	test2.ChannelNo = 32
-	test2.OutputNo = 20
+	test2.ChannelNo = "32"
+	test2.OutputNo = "20"
 	test2.UsbConn = true
 	test2.WifiConn = true
 	test2.DanteSupport = false
 	test2.About = "user freiendly"
 
-	var test3 = soundapidata.Mixer{}
+	var test3 model
 
 	test3.Name = "X-Air"
 	test3.ModelNo = 193245
 	test3.YearProduce = 2015
 	test3.Price = 3920
 	test3.StillProducing = true
-	test3.ChannelNo = 32
-	test3.OutputNo = 24
+	test3.ChannelNo = "32"
+	test3.OutputNo = "24"
 	test3.UsbConn = true
 	test3.WifiConn = true
 	test3.DanteSupport = false
 	test3.About = "very good for live production"
 
-	var Mixerslice []soundapidata.Mixer
+	var Mixerslice []model
 
 	Mixerslice = append(Mixerslice, test)
 	Mixerslice = append(Mixerslice, test2)
@@ -87,8 +102,11 @@ func main() {
 				w.WriteHeader(http.StatusNotFound)
 				w.Write([]byte("404 - Not Found"))
 			} else {
-				dataRet := Mixerslice[number]
-				fmt.Fprintf(w, "%q", html.EscapeString(dataRet)
+
+				fieldass := Mixerslice[number]
+				fieldneeded := fieldass.Name + fieldass.About + fieldass.ChannelNo + fieldass.OutputNo
+
+				fmt.Fprintf(w, "%q", html.EscapeString(fieldneeded))
 			}
 
 		} else {
@@ -100,9 +118,6 @@ func main() {
 	// Create a server and run it on 8000 port
 	s := &http.Server{
 		Addr: ":8000",
-		// ReadTimeout: 10 * time.Second,
-		// WriteTimeout: 10 * time.Second,
-		// MaxHeaderBytes: 1 << 20,
 	}
 
 	s.ListenAndServe()
